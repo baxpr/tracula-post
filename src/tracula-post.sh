@@ -3,11 +3,16 @@
 export out_dir=../OUTPUTS
 
 # Find all the pathstats files and store in a text file
-find "${out_dir}"/SUBJECT -name pathstats.overall.txt > "${out_dir}"/pathstats-files.txt
+ls -1d "${out_dir}"/SUBJECT/dpath/*_bbr > "${out_dir}"/pathlist.txt
 
-# Extract
+# Extract for each path (tractstats2table can't handle different paths in same pass)
 mkdir "${out_dir}"/STATS
-tractstats2table \
-    --load-pathstats-from-file "${out_dir}"/pathstats-files.txt \
-    --overall \
-    --tablefile "${out_dir}"/STATS/all-pathstats.txt
+while read -r path; do
+    tract=$(basename ${path})
+    tractstats2table \
+        -i "${path}"/pathstats.overall.txt \
+        --overall -d comma \
+        --tablefile "${out_dir}"/STATS/pathstats-"${tract}".txt
+done < "${out_dir}"/pathlist.txt
+
+# Next a bit of python to combine the stat files
