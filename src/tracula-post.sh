@@ -15,4 +15,6 @@ while read -r path; do
         --tablefile "${out_dir}"/STATS/pathstats-"${tract}".txt
 done < "${out_dir}"/pathlist.txt
 
-# Next a bit of python to combine the stat files
+# Next a bit of python to combine the stat files. Will make a new file at
+#  out_dir/STATS/pathstats-all.csv which is what we want to keep
+combine-stats.py --out_dir "${out_dir}"
