@@ -14,11 +14,6 @@ info['tractlong'] = info.srcpath.apply(os.path.basename)
 info['tract'] = [x.split('_')[0] for x in info.tractlong]
 info['statfile'] = [f'{out_dir}/STATS/pathstats-{x}.txt' for x in info.tractlong]
 
-#data = pandas.read_csv(info.statfile[0], usecols=range(1, 19))
-
-#data = [pandas.read_csv(x, usecols=range(1, 19)) for x in info.statfile]
-
-
 for row in info.itertuples(name='row'):
         
     thisdata = pandas.read_csv(info.statfile[row.Index], usecols=range(1, 19))
