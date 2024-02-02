@@ -18,3 +18,6 @@ done < "${out_dir}"/pathlist.txt
 # Next a bit of python to combine the stat files. Will make a new file at
 #  out_dir/STATS/pathstats-all.csv which is what we want to keep
 combine_stats.py --out_dir "${out_dir}"
+
+# PDF
+make_pdf.sh
