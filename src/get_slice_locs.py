@@ -4,13 +4,14 @@ import argparse
 import nibabel
 import numpy
 import scipy.ndimage
+import sys
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--img_niigz')
 parser.add_argument('--axis')
 args = parser.parse_args()
 img_niigz = args.img_niigz
-axis = int(args.axis)
+axis = args.axis
 
 img = nibabel.load(img_niigz)
 imgdata = img.get_fdata()
@@ -20,6 +21,11 @@ imgdata[numpy.isnan(imgdata)] = 0
 imgdata[imgdata>0] = 1
 com_ijk = scipy.ndimage.center_of_mass(imgdata)
 com_xyz = nibabel.affines.apply_affine(img.affine, com_ijk)
+if axis=='com':
+    print(f'{com_xyz[0]:.0f} {com_xyz[1]:.0f} {com_xyz[2]:.0f}')
+    sys.exit(0)
+else:
+    axis = int(axis) 
 
 # Extents
 locs = numpy.where(imgdata>0)

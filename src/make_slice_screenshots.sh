@@ -1,24 +1,27 @@
 #!/bin/bash
 
-cd "${tmp_dir}"
+mask_niigz=../OUTPUTS/SUBJECT/dmri/nodif_brain_mask.nii.gz
 
-# Get brain mask extents
-mri_convert "${mri_dir}"/brainmask.mgz brainmask.nii.gz
-extents=$(compute_extents.py brainmask.nii.gz)
-extents=(${extents// / })
-xmin=$((${extents[0]} + 4))
-xmax=$((${extents[1]} - 4))
-ymin=$((${extents[2]} + 4))
-ymax=$((${extents[3]} - 4))
-zmin=$((${extents[4]} + 4))
-zmax=$((${extents[5]} - 4))
-
-# And center of mass
-com=$(fslstats brainmask.nii.gz -c)
+com=$(get_slice_locs.py --axis com --img_niigz ${mask_niigz})
 com=(${com// / })
-comx=$(printf "%.0f" ${com[0]})
-comy=$(printf "%.0f" ${com[1]})
-comz=$(printf "%.0f" ${com[2]})
+
+for axis in 0 1 2; do
+
+    fsaxis=$((axis+1))
+
+    slices=$(get_slice_locs.py --axis $axis --img_niigz ${mask_niigz})
+    slices=(${slices// / })
+
+    img=0
+    for slice in ${slices[@]}; do
+        ((img++))
+        fname=$(printf "slice_${axis}_%02i" ${img})
+        echo "$fname"
+    done
+done
+
+exit 0
+
 
 # Slice by slice (4mm gap). Even numbered image files are with no overlay, 
 # odd with, so we get correct sorting later
