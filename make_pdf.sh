@@ -1,9 +1,5 @@
 #!/bin/bash
 
-out_dir=$(pwd)/../OUTPUTS
-trac_dir=$(pwd)/../OUTPUTS/SUBJECT
-label_info="TEST SUBJ TEST SESS TEST SCAN"
-
 mask_niigz=${trac_dir}/dmri/nodif_brain_mask.nii.gz
 fa_niigz=${trac_dir}/dmri/dtifit_FA.nii.gz
 md_niigz=${trac_dir}/dmri/dtifit_MD.nii.gz
@@ -91,38 +87,3 @@ convert \
     x_mont_???.png y_mont_???.png z_mont_???.png \
     -page letter \
     ${out_dir}/tracula.pdf
-
-
-exit 0
-
-
-# Trim 3d screenshots
-for i in [lr]h_*.png;do convert $i -fuzz 1% -trim +repage t${i};done
-
-# Create first page, 3Ds
-montage -mode concatenate \
-    tlh_lat_aparc.png tlh_lat_pial.png tlh_lat_thick.png \
-    trh_lat_aparc.png trh_lat_pial.png trh_lat_thick.png \
-    tlh_med_aparc.png tlh_med_pial.png tlh_med_thick.png \
-    trh_med_aparc.png trh_med_pial.png trh_med_thick.png \
-    -tile 3x -quality 100 -background black -gravity center \
-    -trim -border 5 -bordercolor black -resize 300x first_page.png
-
-convert \
-    -size 1224x1584 xc:white \
-    -gravity North \( first_page.png -resize 1194x1194 -geometry +0+100 \) -composite \
-    -gravity NorthEast -pointsize 24 -annotate +20+50 "QA Summary - recon-all" \
-    -gravity SouthEast -pointsize 24 -annotate +20+20 "$the_date" \
-    -gravity SouthWest -pointsize 24 -annotate +20+20 "$(cat $FREESURFER_HOME/build-stamp.txt)" \
-    -gravity NorthWest -pointsize 24 -annotate +20+50 "${label_info}" \
-    first_page.png
-
-# Concatenate into PDF
-convert \
-    first_page.png \
-    x_mont_???.png y_mont_???.png z_mont_???.png \
-    -page letter \
-    freesurfer_detailed.pdf
-
-mkdir "${SUBJECTS_DIR}"/PDF_DETAIL
-cp freesurfer_detailed.pdf "${SUBJECTS_DIR}"/PDF_DETAIL

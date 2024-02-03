@@ -1,6 +1,26 @@
 #!/usr/bin/env bash
 
-export out_dir=../OUTPUTS
+# Defaults
+export label_info="UNKNOWN SCAN"
+export out_dir="/OUTPUTS"
+export trac_dir="/OUTPUTS/TRACULA/SUBJECT"
+
+# Parse inputs
+while [[ $# -gt 0 ]]
+do
+  key="$1"
+  case $key in
+    --label_info)
+        export label_info="$2"; shift; shift;;
+    --out_dir)
+        export out_dir="$2"; shift; shift;;
+    --trac_dir)
+        export trac_dir="$2"; shift; shift;;
+    *)
+		echo "Unknown argument $key"; shift;;
+  esac
+done
+
 
 # Find all the pathstats files and store in a text file
 ls -1d "${out_dir}"/SUBJECT/dpath/*_bbr > "${out_dir}"/pathlist.txt
