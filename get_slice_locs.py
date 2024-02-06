@@ -3,7 +3,6 @@
 import argparse
 import nibabel
 import numpy
-import scipy.ndimage
 import sys
 
 parser = argparse.ArgumentParser()
