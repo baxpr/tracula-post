@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 # Defaults
-export label_info="UNKNOWN SCAN"
+export label_info=""
 export out_dir="/OUTPUTS"
-export trac_dir="/OUTPUTS/TRACULA/SUBJECT"
+export trac_dir="/OUTPUTS/SUBJECT"
 
 # Parse inputs
 while [[ $# -gt 0 ]]
