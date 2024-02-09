@@ -57,14 +57,14 @@ montage -mode concatenate slice_1_*.png -border 5 -bordercolor white -tile 2x4 y
 montage -mode concatenate slice_2_*.png -border 5 -bordercolor white -tile 2x4 z_mont_%03d.png
 
 # Pad and annotate with assessor name
-for i in ?_mont_???.png; do    
+for i in ?_mont_???.png; do
     convert \
         -size 1224x1584 xc:white \
         -gravity Center \( ${i} -resize 1194x1454 -geometry +0+0 \) -composite \
-        -gravity SouthEast -pointsize 24 -annotate +20+20 "$(date)" \
-        -gravity NorthWest -pointsize 24 -annotate +20+40 "${label_info}" \
         ${i}
 done
+#-gravity SouthEast -pointsize 24 -annotate +20+20 "$(date)" \
+#-gravity NorthWest -pointsize 24 -annotate +20+40 "${label_info}" \
 
 # 3D view of all tract maps on FA
 freeview --layout 1 --viewport 3d --viewsize 800 800 \
@@ -77,9 +77,9 @@ convert view3d.png -fuzz 1% -trim +repage -bordercolor black -border 30 view3d.p
 convert \
     -size 1224x1584 xc:white \
     -gravity Center \( view3d.png -resize 1194x1454 -geometry +0+0 \) -composite \
-    -gravity SouthEast -pointsize 24 -annotate +20+20 "$(date)" \
-    -gravity NorthWest -pointsize 24 -annotate +20+40 "${label_info}" \
     view3d.png
+#-gravity SouthEast -pointsize 24 -annotate +20+20 "$(date)" \
+#-gravity NorthWest -pointsize 24 -annotate +20+40 "${label_info}" \
 
 # Concatenate into PDF
 convert \
